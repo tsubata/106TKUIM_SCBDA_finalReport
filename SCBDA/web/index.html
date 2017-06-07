@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://getbootstrap.com/examples/navbar/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>StockBot</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./index_files/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="./index_files/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./index_files/navbar.css" rel="stylesheet">
+    <!--Google Chart resource-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript" src="js/jquery-3.2.0.min.js"></script>
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="./index_files/ie-emulation-modes-warning.js.下載"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  <style type="text/css" id="parrottalks-notetaker-style">      html > body.evernote_clearly__before_visible #parrottalks-notetaker > iframe,      html > body.clearlyBeforeVisible #parrottalks-notetaker > iframe:not(#evernoteGlobalTools):not(#evernoteOptionsPage):not(#evernoteClearlyArticle) {        visibility: visible !important;      }      .evernote_clearly__before_visible #evernote_clearly__reformat,      .clearlyBeforeVisible #evernoteClearlyArticle {        z-index: 2147483646 !important;      }    
+    .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+  </style></head>
+
+  <body>
+
+    <div class="container">
+
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">Stock Bot</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="#" onclick="showNewsArea()">最新消息</a></li>
+              <li><a href="#" onclick="showIndicatorArea()">各大指數</a></li>
+              <li><a href="#" onclick="showTWstockArea()">台股資訊</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="active">
+              <li><input type="text" id="companyInput" placeholder="請輸入股票名稱或代碼" class="form-control" style="margin-top:8px"></li>
+              <li><input class="btn btn-default" type="button" value="查詢" style="margin-top:8px;margin-left:10px;background-color:#e6e6e6;" onclick="alert('施工中ヽ(∀ﾟ )人(ﾟ∀ﾟ)人( ﾟ∀)人(∀ﾟ )人(ﾟ∀ﾟ)人( ﾟ∀)ﾉ');"></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+      <img src="img/icon.png"/ style="width:30%">
+      <br>
+      <br>
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="loader" style="margin-left:100px" id="loader"></div>
+      <div class="jumbotron" id="latestNews">
+        <h2 style="font-weight: bold">最新消息</h2>
+        <p>抓取近日最新的股市相關資訊</p>
+        <table class="table" id="newstable">
+          <thead>
+            <tr>
+              <th>分類</th>
+              <th>主題</th>
+              <th>來源</th>
+            </tr>
+          </thead>
+          <tbody id="newstbody">
+          </tbody>
+        </table>
+      </div>
+      <div class="jumbotron" id="IndicatorHistory">
+        <h2 style="font-weight: bold">各大指數</h2>
+        <p>將股市指數數值經過正規化(Normalization)處理並呈現。</p>
+        <div id="IndicatorHistory_total_area">
+          <div id="IndicatorHistory_div" style=""></div>
+          <input class="btn btn-default" type="button" value="詳細" style="margin-top:8px;margin-left:10px;background-color:#e6e6e6;" onclick="showNewsDetailsArea();">
+        </div>
+        <div id="IndicatorHistory_individual_area">
+          <div id="IndicatorHistory_tw" style=""></div>
+          <div id="IndicatorHistory_nasdaq" style=""></div>
+          <div id="IndicatorHistory_dj" style=""></div>
+          <input class="btn btn-default" type="button" value="總體" style="margin-top:8px;margin-left:10px;background-color:#e6e6e6;" onclick="showNewsTotalArea();" id="IndicatorHistoryTotalAreaBtn">
+        </div>
+      </div>
+      <div class="jumbotron" id="TW_stock">
+        <h2 style="font-weight: bold">台股資訊</h2>
+        <p>成交張數排行前10名</p>
+        <br>
+        <table class="table" id="stcokTransactionTop10_table">
+          <thead>
+            <tr>
+              <th>代號</th>
+              <th>公司</th>
+              <th>股價</th>
+              <th>漲跌</th>
+              <th>(%)</th>
+              <th>量(張)</th>
+            </tr>
+          </thead>
+          <tbody id="stcokTransactionTop10_tbody">
+          </tbody>
+        </table>
+        <br>
+        <p>成交價排行前10名</p>
+        <table class="table" id="stcokPriceTop10_table">
+          <thead>
+            <tr>
+              <th>代號</th>
+              <th>公司</th>
+              <th>股價</th>
+              <th>漲跌</th>
+              <th>(%)</th>
+              <th>量(張)</th>
+            </tr>
+          </thead>
+          <tbody id="stcokPriceTop10_tbody">
+          </tbody>
+        </table>
+      </div>
+      <div class="jumbotron" id="individualInfo">
+        <h1>Navbar example</h1>
+        <p>This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work. It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+        <p>
+          <a class="btn btn-lg btn-primary" href="http://getbootstrap.com/components/#navbar" role="button">View navbar docs »</a>
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./index_files/jquery.min.js.下載"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="./index_files/bootstrap.min.js.下載"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="./index_files/ie10-viewport-bug-workaround.js.下載"></script>
+    <script type="text/javascript">
+      // google chart init
+      google.charts.load('current', {packages: ['corechart', 'line']});
+      //init chart & news
+      
+      initProcess();
+      
+      function initProcess(){
+        initHideArea();
+        google.charts.setOnLoadCallback(getIndicatorHistoryData);
+        getNews();
+        getStcokTransactionTop10();
+        getStcokPrizeTop10();
+      }
+
+      //取得新聞資料顯示於table
+      function getNews(){
+        $.ajax(
+           {
+               url:'http://127.0.0.1:8000/api/getNews/',
+               data:{
+                "question":"getNews",
+               },
+               success:function (response) {
+                  for (var i = 0; i <response.data.length; i++) {
+                    newsclass = response.data[i]['newsclass'];
+                    newstitle = response.data[i]['newstitle'];
+                    newslink = response.data[i]['newslink'];
+                    newsdate = response.data[i]['newsdate'];
+                    $('#newstable').find('tbody').append('<tr><td>'+newsclass+'</td><td><a href="'+newslink+'">'+newstitle+'</a></td><td>'+newsdate+'</td></tr>');
+                  }
+
+                  $('#loader').hide();
+                  showNewsArea();
+                  
+               },
+               error:function(xhr, ajaxOptions, thrownError){
+                  console.log(xhr.status + ": " + xhr.responseText);
+               }
+           }
+        )        
+      }
+      function getStcokTransactionTop10(){
+        $.ajax(
+           {
+               url:'http://127.0.0.1:8000/api/getStcokTransactionTop10/',
+               data:{
+                "question":"getStcokTransactionTop10",
+               },
+               success:function (response) {
+                  for (var i = 0; i <response.data.length; i++) {
+                    companynum = response.data[i][0];
+                    companyname = response.data[i][1];
+                    stockprize = response.data[i][2];
+                    prizefloat = response.data[i][3];
+                    prizefloatpercent = response.data[i][4];
+                    transactionamount = response.data[i][5];
+                    $('#stcokTransactionTop10_table').find('tbody').append('<tr><td>'+companynum+'</td><td>'+companyname+'</td><td>'+stockprize+'</td><td>'+prizefloat+'</td><td>'+prizefloatpercent+'</td><td>'+transactionamount+'</td></tr>');
+                  }
+                  
+               },
+               error:function(xhr, ajaxOptions, thrownError){
+                  console.log(xhr.status + ": " + xhr.responseText);
+               }
+           }
+        )        
+      }
+
+      function getStcokPrizeTop10(){
+        $.ajax(
+           {
+               url:'http://127.0.0.1:8000/api/getStcokPriceTop10/',
+               data:{
+                "question":"getStcokPriceTop10",
+               },
+               success:function (response) {
+                  for (var i = 0; i <response.data.length; i++) {
+                    companynum = response.data[i][0];
+                    companyname = response.data[i][1];
+                    stockprize = response.data[i][2];
+                    prizefloat = response.data[i][3];
+                    prizefloatpercent = response.data[i][4];
+                    transactionamount = response.data[i][5];
+                    $('#stcokPriceTop10_table').find('tbody').append('<tr><td>'+companynum+'</td><td>'+companyname+'</td><td>'+stockprize+'</td><td>'+prizefloat+'</td><td>'+prizefloatpercent+'</td><td>'+transactionamount+'</td></tr>');
+                  }
+                  
+               },
+               error:function(xhr, ajaxOptions, thrownError){
+                  console.log(xhr.status + ": " + xhr.responseText);
+               }
+           }
+        )        
+      }
+
+      //透過ajax抓取指數歷史資料
+      function getIndicatorHistoryData(){
+        $.ajax(
+           {
+               url:'http://127.0.0.1:8000/api/getIndicatorHistory/',
+               data:{
+                "question":"getIndicatorHistory",
+               },
+               success:function (response) {
+                  // var dataRows = arrayRebuild(response.data);
+                  drawIndicatorHistory(response.data);
+                  //drawIndicatorHistory_dj(response.data);
+
+                  drawIndicatorHistory_dj(cutdataRows(response.data,1,21));
+                  drawIndicatorHistory_nasdaq(cutdataRows(response.data,2,6));
+                  drawIndicatorHistory_tw(cutdataRows(response.data,3,10))
+               },
+               error:function(xhr, ajaxOptions, thrownError){
+                  console.log(xhr.status + ": " + xhr.responseText);
+                  alert("ajax connection error");
+               }
+           }
+        )
+      }
+
+      function drawIndicatorHistory(dataRows) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', '道瓊工業指數');
+        data.addColumn('number', 'NASDAQ指數');
+        data.addColumn('number', '台股加權指數');
+
+        data.addRows(dataRows);
+        // data.addRows(getIndicatorHistoryData());
+
+        var options = {
+          hAxis: {
+            title: '日期'
+          },
+          colors: ['#a52714', '#097138','#0047b3']
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('IndicatorHistory_div'));
+        chart.draw(data, options);
+      }
+
+      function drawIndicatorHistory_dj(dataRows) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', '道瓊工業指數');
+
+        data.addRows(dataRows);
+        // data.addRows(getIndicatorHistoryData());
+
+        var options = {
+          hAxis: {
+            title: '日期'
+          },
+          colors: ['#a52714']
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('IndicatorHistory_dj'));
+        chart.draw(data, options);
+      }
+      function drawIndicatorHistory_nasdaq(dataRows) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', 'NASDAQ指數');
+
+        data.addRows(dataRows);
+        // data.addRows(getIndicatorHistoryData());
+
+        var options = {
+          hAxis: {
+            title: '日期'
+          },
+          colors: ['#097138']
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('IndicatorHistory_nasdaq'));
+        chart.draw(data, options);
+      }
+      function drawIndicatorHistory_tw(dataRows) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('number', 'X');
+        data.addColumn('number', '台股加權指數');
+
+        data.addRows(dataRows);
+        // data.addRows(getIndicatorHistoryData());
+
+        var options = {
+          hAxis: {
+            title: '日期'
+          },
+          colors: ['#0047b3']
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('IndicatorHistory_tw'));
+        chart.draw(data, options);
+      }
+      function cutdataRows(dataRows,columns,weighted){
+        mainArray = [];
+        for(var i=0;i<dataRows.length;i++){
+          mainArray.push([dataRows[i][0],dataRows[i][columns]*weighted]);
+        }
+        return mainArray;
+      }
+
+      //控制area hide & show
+      function initHideArea(){
+        $('#latestNews').hide();
+        $('#IndicatorHistory').hide();
+        $('#TW_stock').hide();
+        $('#individualInfo').hide();
+      }
+      function showNewsArea(){
+        $('#latestNews').fadeIn('slow');
+        $('#IndicatorHistory').hide();
+        $('#TW_stock').hide();
+        $('#individualInfo').hide();
+        $('#IndicatorHistory_individual_area').hide();
+      }
+      function showNewsDetailsArea(){
+        $('#IndicatorHistory_individual_area').fadeIn('slow');
+        $('#IndicatorHistory_total_area').hide();
+        $("html, body").animate({ scrollTop: $('#IndicatorHistoryTotalAreaBtn').offset().top }, 2000);
+        // $.scrollTo($(), 100);
+      }
+      function showNewsTotalArea(){
+        $('#IndicatorHistory_individual_area').hide();
+        $('#IndicatorHistory_total_area').fadeIn('slow');
+      }
+      function showIndicatorArea(){
+        $('#latestNews').hide();
+        $('#IndicatorHistory').fadeIn('slow');
+        $('#TW_stock').hide();
+        $('#individualInfo').hide();
+      }
+      function showTWstockArea(){
+        $('#latestNews').hide();
+        $('#IndicatorHistory').hide();
+        $('#TW_stock').fadeIn('slow');
+        $('#individualInfo').hide();
+      }
+      function showIndividualArea(){
+        $('#latestNews').hide();
+        $('#IndicatorHistory').hide();
+        $('#TW_stock').hide();
+        $('#individualInfo').fadeIn('slow');
+      }
+    </script>
+
+</body></html>
